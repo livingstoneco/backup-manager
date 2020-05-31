@@ -44,7 +44,7 @@ class Backup extends Command
         $connection = config('database.connections.mysql');
         $date = now()->format('Y-m-d');
 
-        $filename = "{$connection['host']}-{$date}.sql";
+        $filename = "{$connection['database']}-{$date}.sql";
         $filepath = storage_path("app/backups/{$filename}");
         MySql::create()
             ->setHost($connection['host'])
