@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "livingstoneco/backup-manager",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Create nightly database backups",
     "keywords": [
         "framework",
         "laravel"
