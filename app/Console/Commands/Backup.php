@@ -47,6 +47,7 @@ class Backup extends Command
 
         $filename = "{$connection['database']}-{$date}.sql";
         $filepath = storage_path("app/backups/{$filename}");
+        $this->line("{$name}: Creating database backup");
         MySql::create()
             ->setHost($connection['host'])
             ->setDbName($connection['database'])
@@ -63,11 +64,13 @@ class Backup extends Command
             $contents = encrypt($contents);
         }
 
+        $this->line("{$name}: Transferring to off-site storage");
         $uploaded = Storage::disk('s3')->put("backups/{$filename}", $contents);
 
-        if($uploaded)
-        {
+        if ($uploaded) {
             unlink($filepath);
+            $this->line("{$name}: Backup transferred to off-site storage");
         }
+        $this->info("{$name}: Backup complete 🎉");
     }
 }
