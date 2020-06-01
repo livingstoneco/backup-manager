@@ -55,9 +55,10 @@ class Backup extends Command
             ->dumpToFile($filepath);
         $contents = file_get_contents($filepath);
 
-
-        if($shouldEncrypt)
-        {
+        if ($shouldEncrypt) {
+            $this->line("{$name}: Encrypting backup");
+            $filename = explode('.', $filename);
+            $filename = $filename[0].'.encrypted.'.$filename[1];
             $contents = encrypt($contents);
         }
 
