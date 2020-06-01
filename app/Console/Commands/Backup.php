@@ -43,6 +43,7 @@ class Backup extends Command
         $shouldEncrypt = $this->option('encrypt');
         $connection = config('database.connections.mysql');
         $date = now()->format('Y-m-d');
+        $name = strtoupper($connection['database']);
 
         $filename = "{$connection['database']}-{$date}.sql";
         $filepath = storage_path("app/backups/{$filename}");
