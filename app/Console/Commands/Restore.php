@@ -60,5 +60,28 @@ class Restore extends Command
         // Get file contents
         $sql = Storage::disk('s3')->get($backup);
 
+        // Attempt to decrypt database backup
+        if($isEncrypted)
+        {
+            try {
+                $sql = decrypt($sql);
+            } catch (DecryptException $e) {
+                // Unable to decrypt file. Either the file is not encrypted or
+                // APP_KEY was not used to encrypt the file when the backup was created
+                $this->error('Failed to decrypt backup. This may be because the APP_KEY specified in .env differs from the key used to encrypt the file or the backup is unencrypted.');
+                
+                // Lets try this again...
+                $this->call('restore');
+                exit();
+            }
+        }
+
+        // Save plain text copy of backup
+        file_put_contents(storage_path('app/backups/'.now()->format('Y-m-d_H-i').'.sql'),$sql);
+
+
+        // DB::unprepared($sql);
+
+        
     }
 }
